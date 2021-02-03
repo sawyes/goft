@@ -1,0 +1,40 @@
+version: '2'
+
+networks:
+  backend:
+    driver: bridge
+
+services:
+
+  mysql:
+    image: mysql:5.7
+    environment:
+      - MYSQL_DATABASE=test
+      - MYSQL_ROOT_PASSWORD=root
+      - TIMEZONE=Asia/Shanghai
+    volumes:
+      - ./docker/mysql/my.ini:/etc/mysql/conf.d/my.cnf:rw
+      - ./docker/mysql/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    ports:
+      - 3306:3306
+    networks:
+      - backend
+    restart: always
+
+  redis:
+    image: redis
+    environment:
+      - TIMEZONE=Asia/Shanghai
+    ports:
+      - 6379:6379
+    networks:
+      - backend
+    restart: always
+
+  busybox:
+    image: busybox
+    stdin_open: true
+    tty: true
+    command: sh
+    networks:
+      - backend
