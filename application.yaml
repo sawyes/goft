@@ -1,2 +1,8 @@
+hello2:
+  world: random()
+
 server:
   port: 8081
+
+hello:
+  world: random()
