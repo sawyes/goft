@@ -23,7 +23,8 @@ func Ignite() *Goft {
 
 // 启动函数
 func (this *Goft) Lanuch() {
-	this.Run(":9888") // 套接字, 暂时写死
+	port := InitConfig().Server.Port
+	this.Run(fmt.Sprintf(":%d", port)) // 套接字, 暂时写死
 }
 
 // 根据匿名继承, 重载Handle
