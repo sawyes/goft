@@ -5,7 +5,7 @@ import "fmt"
 type UserModel struct {
 	//gin文档tag方式绑定`uri`,`binding`
 	//gorm tag
-	UserId int `gorm:"column:id" uri:"id" binding:"required,gt=0"`
+	UserId int `gorm:"column:id" uri:"id" binding:"required,gt=0" xorm:"'id'"`
 	UserName string `gorm:"column:user_name"`
 }
 

@@ -8,7 +8,7 @@ import (
 
 func main() {
 	goft.Ignite().
-		DB(goft.NewGormAdapter()).
+		Beans(goft.NewGormAdapter(), goft.NewXormAdapter()).
 		Attach(NewUserMiddleware()).
 		Mount("/v1", NewIndexClasses(), NewUserClasses()).
 		Lanuch()
