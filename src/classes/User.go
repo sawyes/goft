@@ -9,6 +9,7 @@ import (
 type User struct {
 	//*goft.GormAdapter
 	*goft.XormAdapter
+	Age *goft.Value `prefix:"user.age"`
 }
 
 func NewUserClasses() *User {
@@ -18,6 +19,11 @@ func NewUserClasses() *User {
 func (this *User) Build(goft *goft.Goft) {
 	goft.Handle("GET", "/user", this.UserLists)
 	goft.Handle("GET", "/user/detail/:id", this.UserDetail)
+	goft.Handle("GET", "/user/annotation", this.UserAnnotation)
+}
+
+func (this *User) UserAnnotation( *gin.Context) string {
+	return "获取注解值" + this.Age.String()
 }
 
 func (this *User) UserLists(context *gin.Context) goft.Models {

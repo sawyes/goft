@@ -1,5 +1,8 @@
 server:
-  port: 8081
+  port: 9888
 
-hello:
-  world: random()
+# 用户自定义
+config:
+  user:
+    score: 100
+    age: 33

@@ -3,10 +3,10 @@ package middleware
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"io/ioutil"
 )
 
 type UserMiddleware struct {
-
 }
 
 func NewUserMiddleware() *UserMiddleware {
@@ -14,8 +14,18 @@ func NewUserMiddleware() *UserMiddleware {
 }
 
 func (this *UserMiddleware) OnRequest(context *gin.Context) error {
-	fmt.Println("用户中间件->start")
+	
+	params, _ := ioutil.ReadAll(context.Request.Body)
+	
+	fmtString := fmt.Sprintf("[UserMiddleware] Method: %s, Uri: %s, Params: %s",
+		context.Request.Method,
+		context.Request.URL,
+		string(params),
+	)
+	
+	fmt.Println(fmtString)
+	
 	context.Next()
-	fmt.Println("用户中间件->end")
+	
 	return nil
 }
