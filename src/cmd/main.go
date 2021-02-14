@@ -15,6 +15,7 @@ func main() {
 	//return
 	goft.GenTplFunc("src/funcs")
 	
+	
 	goft.Ignite().
 		Beans(goft.NewGormAdapter(), goft.NewXormAdapter()).
 		Attach(NewUserMiddleware()).

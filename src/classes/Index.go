@@ -1,6 +1,7 @@
 package classes
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"mygin/src/goft"
 )
@@ -18,6 +19,7 @@ func (this *Index) Build(goft *goft.Goft) {
 	
 	goft.Handle("GET", "/index", this.GetIndex)
 	goft.Handle("GET", "/hello", this.GetHello)
+	goft.Handle("GET", "/expr", this.GetExpr)
 }
 
 // gin业务逻辑实现
@@ -28,4 +30,12 @@ func (this *Index) GetIndex(context *gin.Context) goft.View {
 
 func (this *Index) GetHello(context *gin.Context) string {
 	return "world"
+}
+
+// 可比较表达式
+func (this *Index) GetExpr(context * gin.Context) string {
+	expr, _ := goft.ExecExpr("age>=19", map[string]interface{}{
+		"age": 19,
+	})
+	return fmt.Sprintf("%v", expr)
 }
