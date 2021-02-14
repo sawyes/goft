@@ -17,7 +17,11 @@ func main() {
 	goft.Ignite().
 		Beans(goft.NewGormAdapter(), goft.NewXormAdapter()).
 		Attach(NewUserMiddleware()).
-		Mount("/v1", NewIndexClasses(), NewUserClasses()).
+		Mount("/v1",
+			NewIndexClasses(),
+			NewUserClasses(),
+			NewArticleCalss(),
+		).
 		Lanuch()
 	
 }
