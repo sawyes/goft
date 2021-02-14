@@ -1,5 +1,7 @@
 server:
   port: 9888
+  name: "myweb"
+  html: "views/*"
 
 # 用户自定义
 config:

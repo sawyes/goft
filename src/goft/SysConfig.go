@@ -11,6 +11,7 @@ import (
 type ServerConfig struct {
 	Name string
 	Port int32
+	Html string
 }
 
 // 系统配置 

@@ -17,9 +17,14 @@ func NewIndexClasses() *Index {
 func (this *Index) Build(goft *goft.Goft) {
 	
 	goft.Handle("GET", "/index", this.GetIndex)
+	goft.Handle("GET", "/hello", this.GetHello)
 }
 
 // gin业务逻辑实现
-func (this *Index) GetIndex(context *gin.Context) string {
-	return "hello"
+func (this *Index) GetIndex(context *gin.Context) goft.View {
+	return "index"
+}
+
+func (this *Index) GetHello(context *gin.Context) string {
+	return "world"
 }

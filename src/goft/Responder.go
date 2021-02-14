@@ -14,6 +14,7 @@ func init()  {
 		new(StringResponder),
 		new(ModelGoftResponder),
 		new(ModelsGoftResponder),
+		new(ViewResponder),
 	}
 }
 
@@ -56,5 +57,14 @@ func (this ModelsGoftResponder) RespondTo() gin.HandlerFunc {
 	return func(context *gin.Context) {
 		context.Writer.Header().Set("Content-type", "application/json")
 		context.Writer.WriteString(string(this(context)))
+	}
+}
+
+// 返回类型为Goft.View
+type View string
+type ViewResponder func(*gin.Context) View
+func (this ViewResponder) RespondTo() gin.HandlerFunc {
+	return func(context *gin.Context) {
+		context.HTML( http.StatusOK, string(this(context)) + ".html", nil)
 	}
 }

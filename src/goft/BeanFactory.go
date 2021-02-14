@@ -2,6 +2,7 @@ package goft
 
 import (
 	"fmt"
+	"log"
 	"reflect"
 )
 
@@ -67,7 +68,7 @@ func (this *BeanFactory) inject(class IClass) {
 		if IsAnnotation(f.Type()) { //代表是注解 ,则单独处理
 			f.Set(reflect.New(f.Type().Elem()))
 			
-			fmt.Printf("%T ==> %v",vClassT.Field(i).Tag, vClassT.Field(i).Tag)
+			log.Println(fmt.Sprintf("[BeanFactory] %T ==> %v",vClassT.Field(i).Tag, vClassT.Field(i).Tag))
 			// vClassT.Field(i).Tag 将tag注入到目标注解类型中,
 			// 然后等待程序调用string方法(如:注解Value实现的string方法)的时候可以注入值
 			f.Interface().(Annotations).SetTag(vClassT.Field(i).Tag)

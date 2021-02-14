@@ -3,13 +3,13 @@ package goft
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	
+	"log"
 )
 
 type Goft struct {
 	// 你们继承
 	*gin.Engine
-	g *gin.RouterGroup
+	g           *gin.RouterGroup
 	beanFactory *BeanFactory
 }
 
@@ -17,15 +17,24 @@ type Goft struct {
 func Ignite() *Goft {
 	g := &Goft{Engine: gin.New(), beanFactory: NewBeanFactory()}
 	g.Use(ErrorHandler()) // 强迫加载的异常处理中间件
-	g.beanFactory.setBean(InitConfig())  //整个配置加载进bean中
+	
+	config := InitConfig()
+	g.beanFactory.setBean(config) //整个配置加载进bean中
+	
+	// 试图配置
+	if config.Server.Html != "" {
+		log.Println("Html glob path: " + config.Server.Html)
+		g.LoadHTMLGlob(config.Server.Html)
+	}
+	
 	return g
 }
 
 // 启动函数
 func (this *Goft) Lanuch() {
-	var port int32=8080
-	if config:=this.beanFactory.GetBean(new(SysConfig));config!=nil{
-		port=config.(*SysConfig).Server.Port
+	var port int32 = 8080
+	if config := this.beanFactory.GetBean(new(SysConfig)); config != nil {
+		port = config.(*SysConfig).Server.Port
 	}
 	this.Run(fmt.Sprintf(":%d", port)) // 套接字, 暂时写死
 }
@@ -64,7 +73,7 @@ func (this *Goft) Attach(f Fairing) *Goft {
 
 // 依赖注入, 用props保存bean对象 如:数据库连接对象
 func (this *Goft) Beans(beans ...interface{}) *Goft {
-
+	
 	this.beanFactory.setBean(beans...)
 	
 	return this
