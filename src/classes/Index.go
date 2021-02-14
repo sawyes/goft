@@ -22,6 +22,7 @@ func (this *Index) Build(goft *goft.Goft) {
 
 // gin业务逻辑实现
 func (this *Index) GetIndex(context *gin.Context) goft.View {
+	context.Set("name", "hello varriable")
 	return "index"
 }
 

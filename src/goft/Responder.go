@@ -1,7 +1,9 @@
 package goft
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
+	"log"
 	"net/http"
 	"reflect"
 )
@@ -65,6 +67,13 @@ type View string
 type ViewResponder func(*gin.Context) View
 func (this ViewResponder) RespondTo() gin.HandlerFunc {
 	return func(context *gin.Context) {
-		context.HTML( http.StatusOK, string(this(context)) + ".html", nil)
+		
+		//obj:= map[string]string{
+		//	"name":"hello world",
+		//}
+		
+		context.HTML( http.StatusOK, string(this(context)) + ".html", context.Keys)
+
+		log.Println("[Responder] ViewResponder keys ", fmt.Sprintf("%+v", context.Keys))
 	}
 }

@@ -5,6 +5,8 @@
     <title> </title>
 </head>
 <body>
-    这是VIEW试图页面-abc
+    <div class="box">这是VIEW试图页面</div>
+    <div class="box">变量测试{{.name}}, 值设置通过context.Set, 绑定Responder通过context.Keys, 将值传递进去</div>
+    <div class="box">自定义模板函数 {{ .name | Box }}</div>
 </body>
 </html>

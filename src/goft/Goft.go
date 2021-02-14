@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"log"
+	"mygin/src/funcs"
 )
 
 type Goft struct {
@@ -23,7 +24,12 @@ func Ignite() *Goft {
 	
 	// 试图配置
 	if config.Server.Html != "" {
-		log.Println("Html glob path: " + config.Server.Html)
+		log.Println("[Goft] html FuncMap: " + config.Server.Html)
+		// 自动生成funcmap
+		g.FuncMap = funcs.FuncMap
+		
+		log.Println("[Goft] config.server.html: " + config.Server.Html)
+		
 		g.LoadHTMLGlob(config.Server.Html)
 	}
 	
