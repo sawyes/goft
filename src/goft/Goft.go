@@ -42,6 +42,7 @@ func (this *Goft) Lanuch() {
 	if config := this.beanFactory.GetBean(new(SysConfig)); config != nil {
 		port = config.(*SysConfig).Server.Port
 	}
+	getCronTask().Start()
 	this.Run(fmt.Sprintf(":%d", port)) // 套接字, 暂时写死
 }
 
@@ -82,5 +83,27 @@ func (this *Goft) Beans(beans ...interface{}) *Goft {
 	
 	this.beanFactory.setBean(beans...)
 	
+	return this
+}
+
+//Field name   | Mandatory? | Allowed values  | Allowed special characters
+//----------   | ---------- | --------------  | --------------------------
+//Seconds      | Yes        | 0-59            | * / , -
+//Minutes      | Yes        | 0-59            | * / , -
+//Hours        | Yes        | 0-23            | * / , -
+//Day of month | Yes        | 1-31            | * / , - ?
+//Month        | Yes        | 1-12 or JAN-DEC | * / , -
+//Day of week  | Yes        | 0-6 or SUN-SAT  | * / , - ?
+//
+//@yearly (or @annually) | Run once a year, midnight, Jan. 1st        | 0 0 0 1 1 *
+//@monthly               | Run once a month, midnight, first of month | 0 0 0 1 * *
+//@weekly                | Run once a week, midnight between Sat/Sun  | 0 0 0 * * 0
+//@daily (or @midnight)  | Run once a day, midnight                   | 0 0 0 * * *
+//@hourly                | Run once an hour, beginning of hour        | 0 0 * * * *
+func (this *Goft) Task(expr string, f func()) *Goft {
+	_, err := getCronTask().AddFunc(expr, f)
+	if err != nil {
+		log.Println(err)
+	}
 	return this
 }

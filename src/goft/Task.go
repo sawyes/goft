@@ -1,6 +1,9 @@
 package goft
 
-import "sync"
+import (
+	"github.com/robfig/cron/v3"
+	"sync"
+)
 
 //goft-task
 
@@ -8,6 +11,16 @@ type TaskFunc func(params ...interface{})
 
 var taskList chan *TaskExecutor //任务列表
 var once sync.Once
+
+var onceCron sync.Once
+var taskCron *cron.Cron
+
+func getCronTask() *cron.Cron {
+	onceCron.Do(func() {
+		taskCron = cron.New(cron.WithSeconds())
+	})
+	return taskCron
+}
 
 func init() {
 	chlist := getTaskList() //得到任务列表
@@ -38,8 +51,8 @@ func getTaskList() chan *TaskExecutor {
 }
 
 type TaskExecutor struct {
-	f TaskFunc
-	p []interface{}
+	f        TaskFunc
+	p        []interface{}
 	callback func()
 }
 
