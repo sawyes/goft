@@ -12,11 +12,12 @@ type Goft struct {
 	*gin.Engine
 	g           *gin.RouterGroup
 	beanFactory *BeanFactory
+	exprData map[string]interface{}
 }
 
 // 构建函数
 func Ignite() *Goft {
-	g := &Goft{Engine: gin.New(), beanFactory: NewBeanFactory()}
+	g := &Goft{Engine: gin.New(), beanFactory: NewBeanFactory(), exprData: map[string]interface{}{}}
 	g.Use(ErrorHandler()) // 强迫加载的异常处理中间件
 	
 	config := InitConfig()
@@ -66,6 +67,8 @@ func (this *Goft) Mount(group string, classes ...IClass) *Goft {
 		
 		// 反射注入
 		this.beanFactory.inject(class)
+		
+		this.Beans(class)
 	}
 	return this
 }
@@ -78,8 +81,12 @@ func (this *Goft) Attach(f Fairing) *Goft {
 	return this
 }
 
-// 依赖注入, 用props保存bean对象 如:数据库连接对象
-func (this *Goft) Beans(beans ...interface{}) *Goft {
+// 加入Beans
+func (this *Goft) Beans(beans ...Bean) *Goft {
+	
+	for _, bean := range beans {
+		this.exprData[bean.Name()] = bean
+	}
 	
 	this.beanFactory.setBean(beans...)
 	
@@ -100,8 +107,22 @@ func (this *Goft) Beans(beans ...interface{}) *Goft {
 //@weekly                | Run once a week, midnight between Sat/Sun  | 0 0 0 * * 0
 //@daily (or @midnight)  | Run once a day, midnight                   | 0 0 0 * * *
 //@hourly                | Run once an hour, beginning of hour        | 0 0 * * * *
-func (this *Goft) Task(expr string, f func()) *Goft {
-	_, err := getCronTask().AddFunc(expr, f)
+func (this *Goft) Task(cron string, expr interface{}) *Goft {
+	var err error
+	
+	if f, ok := expr.(func());ok{
+		_, err = getCronTask().AddFunc(cron, f)
+		
+	} else if exp, ok := expr.(Expr);ok {// 代表是表达式
+		_, err = getCronTask().AddFunc(cron, func() {
+			// this.exprData 保存了Bean, 利用模板语法特点调用bean方法
+			_, exprErr := ExecExpr(exp, this.exprData)
+			if exprErr != nil {
+				log.Println(exprErr)
+			}
+		})
+	}
+	
 	if err != nil {
 		log.Println(err)
 	}

@@ -33,7 +33,16 @@ func(this *ArticleClass) UpdateViews(params ...interface{}){
 		Update("views",gorm.Expr("views+1"))
 }
 
+func (this *ArticleClass) Test() interface{} {
+	log.Println("测试定时任务")
+	return nil
+}
+
 
 func(this *ArticleClass)  Build(goft *goft.Goft){
 	goft.Handle("GET","/article/:id",this.ArticleDetail)
+}
+
+func (this *ArticleClass) Name() string {
+	return "ArticleClass"
 }

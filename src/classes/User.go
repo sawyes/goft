@@ -61,3 +61,7 @@ func (this *User) UserDetail(ctx *gin.Context) goft.Model {
 	
 	return user
 }
+
+func (this *User) Name() string {
+	return "UserClass"
+}

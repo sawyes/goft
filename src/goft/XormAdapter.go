@@ -23,3 +23,7 @@ func NewXormAdapter() *XormAdapter {
 	
 	return &XormAdapter{Engine: db}
 }
+
+func (this *XormAdapter) Name() string {
+	return "XormAdapter"
+}

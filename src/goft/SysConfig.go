@@ -64,3 +64,7 @@ func GetConfigValue(m UserConfig,prefix []string,index int) interface{}  {
 	}
 	return  nil
 }
+
+func (this *SysConfig) Name() string {
+	return "SysConfig"
+}

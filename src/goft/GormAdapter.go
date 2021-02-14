@@ -24,3 +24,7 @@ func NewGormAdapter() *GormAdapter {
 	
 	return &GormAdapter{DB:db}
 }
+
+func (this *GormAdapter) Name() string {
+	return "GormAdapter"
+}

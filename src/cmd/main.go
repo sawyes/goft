@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	. "mygin/src/classes"
 	"mygin/src/goft"
 	. "mygin/src/middleware"
@@ -24,9 +23,10 @@ func main() {
 			NewUserClasses(),
 			NewArticleCalss(),
 		).
-		Task("@daily", func() {
-			log.Println("执行定时任务")
-		}).
+		//Task("0/3 * * * * *", func() {
+		//	log.Println("执行定时任务")
+		//}).
+		//Task("0/3 * * * * *", goft.Expr(".ArticleClass.Test")).
 		Lanuch()
 	
 }
